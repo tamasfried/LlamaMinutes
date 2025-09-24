@@ -43,3 +43,4 @@ def load_minutes(path_str: str) -> str:
     p = Path(path_str)
     if not p.exists():
         raise FileNotFoundError(f"File not found: {p}")
+    
