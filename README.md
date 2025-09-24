@@ -15,6 +15,7 @@ Give it a `.txt` or `.docx` of meeting notes and it returns a structured summary
 - Uses the small, efficient `llama3.2:1b` model in Ollama by default, quick and detailed enough for this task
 - Supports `.txt` and `.docx` inputs  
 - Prints clean, structured summaries in your terminal  
+- Outputs summary as a formatted Word (.docx) document
 
 ---
 
