@@ -72,13 +72,18 @@ def main():
     minutes_text = load_minutes(sys.argv[1])
 
     # Initialize the LLM (Ollama with Llama 3.2 1B model)
-    llm = ChatOllama(model="llama3.2:1b") # Local small 1b model for testing
+    llm = ChatOllama(
+    model="ollama/llama3.2:1b"
+)
 
     # Define the task for the agent
     summariser = Agent(
         name = "Minutes Summariser",
         role = "You are an expert meeting minutes summariser.",
         goal = "Return only key points from the meeting minutes, including decisions, action items with responsible persons, and important discussion points as well as generating a title for the meeting.",
+        backstory="You are an assistant who specialises in summarising meeting notes. "
+              "You extract only the key facts, decisions, and actions. "
+              "You never invent details not present in the text.",
         llm = llm,
         verbose = False,
     )
@@ -104,10 +109,16 @@ Here are the minutes:
 {minutes_text}\"\"\"
 """
     
-    task = Task(description=prompt, agent=summariser)
+    task = Task(
+        description = prompt, 
+        agent = summariser,
+        expected_output = "A structured summary of the meeting minutes containing Key Decisions, "
+                    "Action Items (with owners if mentioned), and Discussion Points. "
+                    "The format must match the example given in the prompt."
+        )
 
     # Create a Crew and run the task
-    crew = Crew(agents=[summariser], tasks=[task], process=Process.SEQUENTIAL)
+    crew = Crew(agents=[summariser], tasks=[task], process=Process.sequential)
     result = crew.kickoff()
 
     # Print the structured summary
