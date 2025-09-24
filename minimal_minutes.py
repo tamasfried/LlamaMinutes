@@ -87,7 +87,7 @@ def main():
     prompt = f"""
 Summarise the following minutes.
 Do not invent any information such as names or dates.
-Return the summar in the following format:
+Return the summary in the following format:
 
 # Meeting Title: <Generate a concise title for the meeting>
 # Key Decisions Made:
