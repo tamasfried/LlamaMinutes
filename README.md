@@ -59,10 +59,10 @@ ollama pull llama3.2:1b
 
 ## ▶️ Usage
 
-Place a minutes file (e.g., `fake_minutes.txt` or `meeting_notes.docx`) in the repo folder and run:
+Place a minutes file (e.g., `minutes.txt` or `meeting_notes.docx`) in the repo folder and run:
 
 ```bash
-python minimal_minutes.py fake_minutes.txt
+python minimal_minutes.py minutes.txt
 # or
 python minimal_minutes.py meeting_notes.docx
 ```
@@ -72,7 +72,7 @@ python minimal_minutes.py meeting_notes.docx
 ```
 LlamaMinutes/
 ├── minimal_minutes.py   # Main CLI script (CrewAI + Ollama)
-├── fake_minutes.txt     # Example minutes file for testing
+├── minutes.txt     # Example minutes file for testing
 ├── README.md            # This document
 └── .gitignore           # Ignore rules
 ```
