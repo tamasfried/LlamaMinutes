@@ -47,11 +47,11 @@ def load_minutes(path_str: str) -> str:
         return p.read_text(encoding='utf-8', errors='ignore')
     
     # Handling Word docs
-    if p.suffix.lower() == '.docx':
+    if p.suffix.lower() == ".docx":
         if docx is None:
-            raise ImportError("python-docx library is required to read .docx files. Install it via 'pip install python-docx'")
-        doc = docx.Document(str(p))
-        return '\n'.join(par.text for par in d.paragraphs)
+            raise RuntimeError("python-docx is required for .docx files. Install with: pip install python-docx")
+        d = docx.Document(str(p))   # create a Document object
+        return "\n".join(par.text for par in d.paragraphs)  # join all paragraphs with newlines
     
     # If unsupported file type
     raise ValueError("Unsupported file type. Please provide a .txt or .docx file.")
