@@ -56,6 +56,40 @@ def load_minutes(path_str: str) -> str:
     # If unsupported file type
     raise ValueError("Unsupported file type. Please provide a .txt or .docx file.")
 
+# ----------------------
+# File Saving Function
+# ----------------------
+from docx import Document
+from pathlib import Path
+
+def save_summary_to_docx(summary: str, input_file: str):
+    """
+    Save the model's summary output to a Word document inside an 'output' folder.
+    Filename will be <inputname>_summary.docx
+    """
+    input_path = Path(input_file)
+
+    # Make sure output folder exists
+    output_dir = input_path.parent / "output"
+    output_dir.mkdir(exist_ok=True)
+
+    out_path = output_dir / f"{input_path.stem}_summary.docx"
+
+    doc = Document()
+    doc.add_heading("Meeting Summary", level=1)
+
+    # Split summary into lines and format them nicely
+    for line in summary.splitlines():
+        if line.strip().startswith("# "):  # Heading
+            doc.add_heading(line.strip("# ").strip(), level=2)
+        elif line.strip().startswith("- "):  # Bullet point
+            doc.add_paragraph(line.strip("- ").strip(), style="List Bullet")
+        elif line.strip():
+            doc.add_paragraph(line.strip())
+
+    doc.save(out_path)
+    print(f"✅ Summary saved to {out_path}")
+
 
 # ----------------------
 # Main Function
@@ -123,6 +157,9 @@ Here are the minutes:
 
     # Print the structured summary
     print(result)
+
+    # Save the summary to a Word document
+    save_summary_to_docx(str(result), "meeting_summary.docx")
 
 if __name__ == "__main__":
     main()
