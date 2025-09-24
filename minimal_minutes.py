@@ -28,7 +28,7 @@ from pathlib import Path    # For file path handling
 from crewai import Agent, Task, Crew, Process
 from langchain_ollama import ChatOllama
 try:
-    import docx # For reading .docx files
+    import docx # type: ignore # For reading .docx files
 except ImportError:
     docx = None # only needed if .docx files are used
 
@@ -59,7 +59,7 @@ def load_minutes(path_str: str) -> str:
 # ----------------------
 # File Saving Function
 # ----------------------
-from docx import Document
+from docx import Document # type: ignore
 from pathlib import Path
 
 def save_summary_to_docx(summary: str, input_file: str):

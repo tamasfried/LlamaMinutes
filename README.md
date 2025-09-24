@@ -1,7 +1,7 @@
 # 📝 LlamaMinutes
 
 **LlamaMinutes** was built by me as a first experiment with local LLMs and CrewAI's agent capabilities. It is a lightweight meeting minutes summariser built with [CrewAI](https://github.com/joaomdmoura/crewai) and [Ollama](https://ollama.com).
-Give it a `.txt` or `.docx` of meeting notes and it returns a structured summary of:
+Give it a `.txt` or `.docx` of meeting notes and it returns a structured summary in the form of a Word (.docx) document including:
 
 - ✅ Key Decisions  
 - ✅ Action Items (with owners if mentioned)  
