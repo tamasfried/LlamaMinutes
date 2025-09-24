@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, send_from_directory, url_for, redirect
 from pathlib import Path
 import tempfile, time
+import markdown  # 👈 convert model text (markdown) -> HTML
 
 from crewai import Agent, Task, Crew, Process, LLM
 
@@ -105,32 +106,33 @@ def save_summary_docx(summary: str, original_name: str) -> Path:
 # ---------- routes ----------
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html", summary=None, download_docx_url=None)
+    return render_template("index.html", summary_html=None, download_docx_url=None)
 
 @app.route("/summarise", methods=["POST"])
 def summarise():
     f = request.files.get("file")
     if not f or f.filename == "":
-        return render_template("index.html", summary="Please choose a .txt or .docx file.", download_docx_url=None)
+        return render_template("index.html", summary_html="<p>Please choose a .txt or .docx file.</p>", download_docx_url=None)
 
     suffix = Path(f.filename).suffix.lower()
     if suffix not in {".txt", ".docx"}:
-        return render_template("index.html", summary="Unsupported file type. Please upload .txt or .docx.", download_docx_url=None)
+        return render_template("index.html", summary_html="<p>Unsupported file type. Please upload .txt or .docx.</p>", download_docx_url=None)
 
-    # save upload to a temp file and read it
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
         f.save(tmp.name)
         minutes_text = load_minutes_from_path(Path(tmp.name))
 
-    # run summary
-    summary = summarize_minutes(minutes_text)
+    summary_text = summarize_minutes(minutes_text)
 
-    # save copies (txt + docx) to /output
-    _ = save_summary_txt(summary, f.filename)
-    docx_path = save_summary_docx(summary, f.filename)
+    # Convert markdown-like text to HTML for nice rendering
+    summary_html = markdown.markdown(summary_text, extensions=["extra", "sane_lists", "nl2br"])
+
+    # Save outputs
+    _ = save_summary_txt(summary_text, f.filename)
+    docx_path = save_summary_docx(summary_text, f.filename)
     download_docx_url = url_for("download_file", filename=docx_path.name)
 
-    return render_template("index.html", summary=summary, download_docx_url=download_docx_url)
+    return render_template("index.html", summary_html=summary_html, download_docx_url=download_docx_url)
 
 @app.route("/download/<path:filename>", methods=["GET"])
 def download_file(filename):

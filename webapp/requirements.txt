@@ -3,3 +3,4 @@ python-docx
 crewai
 langchain-ollama
 python-multipart
+markdown
