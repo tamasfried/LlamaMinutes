@@ -74,6 +74,7 @@ LlamaMinutes/
 ├── minimal_minutes.py   # Main CLI script (CrewAI + Ollama)
 ├── minutes.txt     # Example minutes file for testing
 ├── README.md            # This document
+├── output               # Only once run - includes output .docx file
 └── .gitignore           # Ignore rules
 ```
 
