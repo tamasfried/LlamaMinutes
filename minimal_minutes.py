@@ -1,26 +1,24 @@
-'''
-Minimal Minutes by TamasFried
-----------------
-This script is a basic meeting minutes summariser that captures key points from a meeting transcript.
-It uses:
-    - CrewAI (for agent/task assignment)
-    - LangChain (to connect to a local LLM)
-    - Ollama model "llama3.2:1b" (small and fast for local testing)
-
-Workflow:
-    1. Load the meeting minutes as .txt or .docx file.
-    2. Psas the text to a CrewAI agent. (Llama in this case).
-    The Agent produces a structured summary of the meeting minutes, including:
-        - Key decisions made
-        - Action items assigned (with responsible persons)
-        - Important discussion points
-    4. Print the structured summary.
-
-Running this basic script:
-    python minimal_minutes.py minutes.txt
-    OR
-    python minimal_minutes.py minutes.docx
-'''
+# Minimal Minutes by TamasFried
+# -----------------------------
+# This script is a basic meeting minutes summariser that captures key points from a meeting transcript.
+# It uses:
+#     - CrewAI (for agent/task assignment)
+#     - LangChain (to connect to a local LLM)
+#     - Ollama model "llama3.2:1b" (small and fast for local testing)
+#
+# Workflow:
+#     1. Load the meeting minutes as .txt or .docx file.
+#     2. Pass the text to a CrewAI agent (Llama in this case).
+#     3. The Agent produces a structured summary of the meeting minutes, including:
+#         - Key decisions made
+#         - Action items assigned (with responsible persons)
+#         - Important discussion points
+#     4. Print the structured summary.
+#
+# Running this basic script:
+#     python minimal_minutes.py minutes.txt
+#     OR
+#     python minimal_minutes.py minutes.docx
 
 # Basic Imports
 import sys                  # For command line arguments
@@ -44,3 +42,76 @@ def load_minutes(path_str: str) -> str:
     if not p.exists():
         raise FileNotFoundError(f"File not found: {p}")
     
+    # Handling plain text files
+    if p.suffix.lower() == '.txt':
+        return p.read_text(encoding='utf-8', errors='ignore')
+    
+    # Handling Word docs
+    if p.suffix.lower() == '.docx':
+        if docx is None:
+            raise ImportError("python-docx library is required to read .docx files. Install it via 'pip install python-docx'")
+        doc = docx.Document(str(p))
+        return '\n'.join(par.text for par in d.paragraphs)
+    
+    # If unsupported file type
+    raise ValueError("Unsupported file type. Please provide a .txt or .docx file.")
+
+
+# ----------------------
+# Main Function
+# ----------------------
+def main():
+    # Runs the summarisation process.
+
+    # Ensure file path is provided
+    if len(sys.argv) != 2:
+        print("Usage: python minimal_minutes.py <minutes.txt or minutes.docx>")
+        sys.exit(1)
+
+    # Load the minutes text
+    minutes_text = load_minutes(sys.argv[1])
+
+    # Initialize the LLM (Ollama with Llama 3.2 1B model)
+    llm = ChatOllama(model="llama3.2:1b") # Local small 1b model for testing
+
+    # Define the task for the agent
+    summariser = Agent(
+        name = "Minutes Summariser",
+        role = "You are an expert meeting minutes summariser.",
+        goal = "Return only key points from the meeting minutes, including decisions, action items with responsible persons, and important discussion points as well as generating a title for the meeting.",
+        llm = llm,
+        verbose = False,
+    )
+
+    # Define the task/prompt for the agent
+    prompt = f"""
+Summarise the following minutes.
+Do not invent any information such as names or dates.
+Return the summar in the following format:
+
+# Meeting Title: <Generate a concise title for the meeting>
+# Key Decisions Made:
+- Decision 1
+- Decision 2 or more
+# Action Items:
+- Action Item 1 (Responsible Person)
+- Action Item 2 (Responsible Person) or more
+# Important Discussion Points:
+- Point 1
+- Point 2 or more
+Here are the minutes:
+\"\"\"
+{minutes_text}\"\"\"
+"""
+    
+    task = Task(description=prompt, agent=summariser)
+
+    # Create a Crew and run the task
+    crew = Crew(agents=[summariser], tasks=[task], process=Process.SEQUENTIAL)
+    result = crew.kickoff()
+
+    # Print the structured summary
+    print(result)
+
+if __name__ == "__main__":
+    main()
