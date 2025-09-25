@@ -106,11 +106,22 @@ Summaries are also auto-saved into webapp/output/.
 
 ```
 LlamaMinutes/
-├── minimal_minutes.py   # Main CLI script (CrewAI + Ollama)
-├── minutes.txt     # Example minutes file for testing
-├── README.md            # This document
-├── output               # Only once run - includes output .docx file
-└── .gitignore           # Ignore rules
+├── minimal_minutes.py        # Main CLI script (CrewAI + Ollama)
+├── fake_minutes.txt          # Example minutes file for testing
+├── min_minutes_req.txt       # Requirements for the minimal CLI tool
+├── README.md                 # Project documentation
+├── .gitignore                # Ignore rules
+│
+├── webapp/                   # Flask-based webapp version
+│   ├── app.py                # Web server entry point
+│   ├── requirements.txt      # Webapp-specific dependencies
+│   ├── output/               # Auto-saved summaries (.txt + .docx)
+│   └── templates/
+│       └── index.html        # Web interface
+│
+└── screenshots/              # Images used in README
+├── Launch.png            # Webapp launch page screenshot
+└── Result.png            # Webapp results page screenshot
 ```
 
 ---
@@ -118,4 +129,4 @@ LlamaMinutes/
 
 ## 🙌 Credits
 
-Built by [@tamasfried](https://github.com/tamasfried) with using CrewAI + Ollama.  
+Built by [@tamasfried](https://github.com/tamasfried) using CrewAI + Ollama.  
