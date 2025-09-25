@@ -83,8 +83,12 @@ In addition to the CLI script, there is a simple web interface built with Flask.
 
 ### Webapp Screenshots
 
-![Webapp Launch Page](screenshots/Launch.png)
-![Webapp Results Page](screenshots/Result.png)
+<table>
+  <tr>
+    <td><img src="screenshots/Launch.png" width="400"/></td>
+    <td><img src="screenshots/Result.png" width="400"/></td>
+  </tr>
+</table>
 
 ### Run the webapp
 ```bash
