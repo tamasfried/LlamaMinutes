@@ -75,6 +75,29 @@ python minimal_minutes.py minutes.txt
 python minimal_minutes.py meeting_notes.docx
 ```
 
+---
+
+## 🌐 Webapp Version (Optional)
+
+In addition to the CLI script, there is a simple web interface built with Flask.
+
+### Webapp Screenshots
+
+![Webapp Launch Page](screenshots/Launch.png)
+![Webapp Results Page](screenshots/Result.png)
+
+### Run the webapp
+```bash
+cd webapp
+pip install -r requirements.txt
+python app.py
+```
+Then open http://127.0.0.1:8000 in your browser.
+Upload a .txt or .docx file, view the summary in a polished UI, download it as a Word doc, or clear the screen with one click.
+Summaries are also auto-saved into webapp/output/.
+
+
+
 ## 📂 Project Structure
 
 ```
