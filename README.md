@@ -29,6 +29,13 @@ Give it a `.txt` or `.docx` of meeting notes and it returns a structured summary
 
 ## ⚙️ Installation
 
+### 🔹 Minimal CLI Requirements
+If you just want to run the CLI script (`minimal_minutes.py`) without the web interface, install only the essentials:
+
+```bash
+pip install -r min_minutes_req.txt
+```
+
 ### 1) Clone the repository
 ```bash
 git clone https://github.com/tamasfried/LlamaMinutes.git

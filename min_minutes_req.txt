@@ -1,0 +1,4 @@
+crewai==0.193.2
+crewai-tools==0.73.1
+langchain-ollama==0.3.8
+python-docx==1.2.0
